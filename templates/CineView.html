@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block contenidoCine %}
+<header class="header">
+    <div class="header-right">
+        <h1 class="titulo">CINEPOLIS</h1>
+    </div>
+    <div class="header-left">
+        <a href="/operacion">operaciones</a>
+        <a href="/zodiaco">zodiaco</a>
+        <a href="/cineView">cine</a>
+    </div>
+</header>
+
+<main class="main">
+    <form action="/cineControl" method="post" class="form">
+        <div class="sideEntradas">
+            <h2 class="subtitulo">Entradas</h2>
+
+            <div class="pregunta">
+                <label for="txtNombre" class="label">Nombre</label>
+                <input type="text" id="txtNombre" class="input" name="txtNombre" value="{{nombre}}">
+            </div>
+
+            <div class="pregunta">
+                <label for="txtCantidadPersonas" class="label">Cantidad personas</label>
+                <input type="number" id="txtCantidadPersonas" class="input" name="txtCantidadPersonas"
+                value="{{personas}}">
+            </div>
+
+            <div class="pregunta">
+                <label for="txtCantidad" class="label">Boletos</label>
+                <input type="number" id="txtCantidad" class="input" name="txtCantidad" value="{{boletos}}">
+            </div>
+
+            <div class="pregunta">
+                <label class="label">Tarjeta Cineco</label>
+                <input type="radio" name="txtTarjeta" id="txtTarjetaSi" value="1" class="radio" required>
+                <label for="txtTarjetaSi" class="radioLabel">Sí</label>
+
+                <input type="radio" name="txtTarjeta" id="txtTarjetaNo" value="2" class="radio" required>
+                <label for="txtTarjetaNo" class="radioLabel">No</label>
+            </div>
+        </div>
+
+        <div class="sideSalida">
+            <h2 class="subtitulo">Salida</h2>
+            <label for="txtSalida" class="label">Valor a pagar</label>
+            <input type="text" class="input salida" name="txtSalida" id="txtSalida" disabled value="{{mensaje}}">
+        </div>
+
+        <div class="sideAccion">
+            <button type="submit" name="accion" value="procesar" class="boton procesar">Procesar</button>
+            <button type="submit" class="boton salir" id="salirSistema">Salir</button>
+        </div>
+    </form>
+</main>
+<script>
+    // LO HICE AQUI POR CUESTIONES DE TIEMPO, SE QUE ES MALA PRACTICA
+    // ADEMAS SE VE FEO JAJAJAJA
+    document.addEventListener('DOMContentLoaded', () => {
+        const nombre = document.querySelector('#txtNombre')
+        const personas = document.querySelector('#txtCantidadPersonas')
+        const boletos = document.querySelector('#txtCantidad')
+        
+        const salida = document.querySelector('#txtSalida')
+        if (salida.value === 'Solo 7 por persona') {
+            alert('Necesitas modificar las personas o los boletos')
+        }
+        else if(salida.value == 'valores incorrectos'){
+            alert('nececutas colocar valores correctos')
+        }
+        else{
+        }
+        const salir = document.querySelector('#salirSistema')
+        salir.addEventListener('click', (e) => {
+            e.preventDefault()
+            nombre.value = ''
+            nombre.placeholder = 'Ingresa el nombre';
+            personas.value = 0
+            boletos.value = 0
+            salida.value = 0
+        })
+
+    })
+</script>
+
+{% endblock %}
