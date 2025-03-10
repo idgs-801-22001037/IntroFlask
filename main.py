@@ -6,11 +6,12 @@ from flask import g
 from flask import flash
 import forms
 from flask_wtf.csrf import CSRFProtect
+import forms_zodiaco
 
 
 app = Flask(__name__)
 app.secret_key='esta es una clave secreta'
-csr = CSRFProtect()
+csrf  = CSRFProtect()
 
 @app.route('/')
 def index():
@@ -39,6 +40,7 @@ def operacion():
     return render_template('OperasBas.html')
 
 @app.route('/resultado', methods=['POST'])
+@csrf.exempt
 def resultado():
     n1 = request.form.get('n1')
     n2 = request.form.get('n2')
@@ -112,8 +114,9 @@ def cineView():
 
 
 @app.route('/cineControl', methods=['POST'])
+@csrf.exempt
 def cineControl():
-    os.system('cls')  # Limpia la consola (solo en Windows)
+    os.system('cls')  
 
     boton = request.form.get('accion')
     nombre = request.form.get('txtNombre')
@@ -147,30 +150,34 @@ def cineControl():
         
     
 
-    
-@app.route('/zodiaco')
+@app.route('/zodiaco', methods=['GET', 'POST'])
 def zodiaco():
-    return render_template('zodiaco.html', signo='rata')
+    form = forms_zodiaco.zodiacoForm(request.form)
+    
+    if form.validate_on_submit():  # Esta función valida el CSRF token también
+        nombre = form.nombre.data
+        apellido = form.apellido.data
+        apellidoM = form.apellidoM.data
+        anio = form.anio.data
+        dia = form.dia.data
+        mes = form.mes.data
 
-@app.route('/zodiacoControl', methods=['POST'])
-def zodiacoControl():
+        fecha_actual = datetime.datetime.now()
+        anio_actual = fecha_actual.year
+        edad = anio_actual - anio
+
+        lista_zodiaco = [
+            "rata", "buey", "tigre", "conejo", "dragon", "serpiente",
+            "caballo", "cabra", "mono", "gallo", "perro", "cerdo"
+        ]
+        signo = lista_zodiaco[(anio - 4) % 12]
+
+        return render_template('zodiaco.html',form=form, nombre=nombre, apellido=apellido, apellidoM=apellidoM, edad=edad, signo=signo)
     
+    return render_template('zodiaco.html', form=form)
+
     
-    listaZignos= [
-        "rata",   
-        "buey",  
-        "tigre",   
-        "conejo",  
-        "dragon",  
-        "serpiente",
-        "caballo", 
-        "cabra",   
-        "mono",    
-        "gallo",   
-        "perro",   
-        "cerdo"    
-    ]
-    boton = request.form.get('accion')
+    """boton = request.form.get('accion')
     nombre = request.form.get('nombre')
     apellido = request.form.get('apellido')
     appelidoM = request.form.get('apellidoM')
@@ -192,7 +199,7 @@ def zodiacoControl():
         os.system('cls')
         print('correcto')
         signo = (anio - 4) % 12
-    return render_template('zodiaco.html', nombre=nombre, apellido=apellido, appelidoM=appelidoM, edad=edad, signo=listaZignos[signo])
+    return render_template('zodiaco.html', nombre=nombre, apellido=apellido, appelidoM=appelidoM, edad=edad, signo=listaZignos[signo])"""
 
 
 
@@ -222,5 +229,5 @@ def alumnos():
 
 
 if __name__ == '__main__':
-        csr.init_app(app)
+        csrf .init_app(app)
         app.run(debug=True, port=8080)

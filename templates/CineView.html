@@ -1,14 +1,24 @@
 {% extends 'base.html' %}
 
-{% block contenidoCine %}
+{% block contenido %}
+<div class="container-fluid">
+    <nav class="navbar navbar-light bg-light rounded-2 border mt-2">
+        <div class="row w-100">
+            <div class="col-6 p-3">
+                <a class="navbar-brand text-dark text-wrap" href="/cineView">IDGS-801-22001037</a>
+            </div>
+            <div class="col-6 d-flex align-items-center justify-content-end">
+
+                <a href="/operacion" class="nav-link m-3 ">Operaciones basicas</a>
+                <a href="/cineView" class="nav-link active m-3">Cinepolis</a>
+                <a href="/zodiaco" class="nav-link m-3">Zodiaco</a>
+            </div>
+        </div>
+    </nav>
+</div>
 <header class="header">
     <div class="header-right">
         <h1 class="titulo">CINEPOLIS</h1>
-    </div>
-    <div class="header-left">
-        <a href="/operacion">operaciones</a>
-        <a href="/zodiaco">zodiaco</a>
-        <a href="/cineView">cine</a>
     </div>
 </header>
 
